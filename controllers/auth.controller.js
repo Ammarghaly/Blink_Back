@@ -1,87 +1,81 @@
 import User from "../models/User.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import AppError from "../utils/AppError.js";
+import { uploadToImgBB } from "../utils/uploadImage.js";
 
 const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
+
     const userExist = await User.findOne({ email });
     if (userExist) {
-      return res.status(400).json({ message: "User already exists" });
+      return next(new AppError("Email already in use", 400));
     }
+
     let imageUrl = "";
     if (req.file) {
-      const base64Image = req.file.buffer.toString("base64");
-      const response = await fetch(
-        `https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API_KEY}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            image: base64Image,
-          }),
-        },
-      );
-
-      const data = await response.json();
-
-      imageUrl = data.data.url;
+      imageUrl = await uploadToImgBB(req.file.buffer);
     }
+
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = await User.create({
       name,
       email,
       password: hashedPassword,
       image: imageUrl,
     });
+
     const token = generateToken(user._id);
+
     res.status(201).json({
+      success: true,
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
+        image: user.image,
       },
       token,
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    next(err);
   }
 };
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
+
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return next(new AppError("Invalid email or password", 401));
     }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return next(new AppError("Invalid email or password", 401));
     }
+
     const token = generateToken(user._id);
+
     res.status(200).json({
+      success: true,
       message: "Login successful",
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
+        image: user.image,
       },
       token,
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    next(err);
   }
 };
