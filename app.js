@@ -6,10 +6,10 @@ import { errorHandler } from "./middleware/error.middleware.js";
 
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://blink-blog-coral.vercel.app",
-];
+const allowedOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(",").map((o) => o.trim())
+  : ["https://blink-blog-coral.vercel.app", "http://localhost:5173"];
+
 app.use(
   cors({
     origin: (origin, callback) => {
