@@ -1,14 +1,21 @@
 import mongoose from "mongoose";
 
 
-const commentSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+const commentSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    text: {
+      type: String,
+      required: true,
+      trim: true,
+    },
   },
-   text: String,
-});
-
+  { timestamps: true }
+);
 
 const PostSchema = new mongoose.Schema({
   title: {
@@ -21,7 +28,7 @@ const PostSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    default: "",
+    default: null,
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
