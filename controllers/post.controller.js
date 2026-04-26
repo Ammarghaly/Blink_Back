@@ -65,6 +65,19 @@ export const getPostById = async (req, res, next) => {
     next(err);
   }
 };
+export const getPostsUserById = async (req, res, next) => {
+  try {
+    const post = await Post.find(req.params.id)
+      .populate("author", "name email image")
+      .populate("comments.user", "name image");
+
+    if (!post) return next(new AppError("Post not found", 404));
+
+    res.json({ success: true, post });
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const addComment = async (req, res, next) => {
   try {

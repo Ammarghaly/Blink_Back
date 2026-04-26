@@ -5,6 +5,7 @@ import {
   getPosts,
   toggleLike,
   getPostById,
+  getPostsUserById,
   updatePost,
   deletePost,
 } from "../controllers/post.controller.js";
@@ -21,6 +22,7 @@ const router = express.Router();
 router.post("/", protect, upload.single("image"), validate(createPostSchema), createPost);
 router.get("/", getPosts);
 router.get("/:id", getPostById);
+router.get("/user/:id",getPostsUserById);
 router.put("/:id", protect, updatePost);
 router.delete("/:id", protect, deletePost);
 router.post("/:id/comment", protect, validate(commentSchema), addComment);
