@@ -67,7 +67,7 @@ export const getPostById = async (req, res, next) => {
 };
 export const getPostsUserById = async (req, res, next) => {
   try {
-    const post = await Post.find(req.params.id)
+    const post = await Post.find({ author: req.params.id })
       .populate("author", "name email image")
       .populate("comments.user", "name image");
 
