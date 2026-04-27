@@ -23,7 +23,7 @@ router.post("/", protect, upload.single("image"), validate(createPostSchema), cr
 router.get("/", getPosts);
 router.get("/:id", getPostById);
 router.get("/user/:id",getPostsUserById);
-router.patch("/:id", protect, updatePost);
+router.patch("/:id", protect,upload.single("image"), updatePost);
 router.delete("/:id", protect, deletePost);
 router.post("/:id/comment", protect, validate(commentSchema), addComment);
 router.put("/:id/like", protect, toggleLike);
