@@ -35,6 +35,6 @@ const PostSchema = new mongoose.Schema({
     required: true,
   },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-  comments: [commentSchema].sort({createdAt:-1}),
+  comments: [commentSchema],
 },{timestamps:true});
 export default mongoose.model("Post", PostSchema);

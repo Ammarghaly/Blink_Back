@@ -90,11 +90,16 @@ export const addComment = async (req, res, next) => {
 
     await post.populate("comments.user", "name image");
 
-    res.status(201).json({ success: true, comments: post.comments });
+    res.status(201).json({
+      success: true,
+      comments: post.comments.sort((a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
+    });
   } catch (err) {
     next(err);
   }
-};
+};  
 
 export const toggleLike = async (req, res, next) => {
   try {
