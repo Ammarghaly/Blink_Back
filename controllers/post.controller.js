@@ -93,7 +93,7 @@ export const addComment = async (req, res, next) => {
     res.status(201).json({
       success: true,
       comments: post.comments.sort((a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       )
     });
   } catch (err) {
