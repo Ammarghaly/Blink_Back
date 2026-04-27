@@ -129,7 +129,11 @@ export const toggleLike = async (req, res, next) => {
 
 export const updatePost = async (req, res, next) => {
   try {
-    const { title, content, image } = req.body;
+    const { title, content } = req.body;
+    let imageUrl = "";
+    if (req.file) {
+      imageUrl = await uploadToImgBB(req.file.buffer);
+    }
 
     const post = await Post.findById(req.params.id);
     if (!post) return next(new AppError("Post not found", 404));
@@ -140,7 +144,7 @@ export const updatePost = async (req, res, next) => {
 
     post.title = title || post.title;
     post.content = content || post.content;
-    post.image = image || post.image;
+    post.image = imageUrl || post.image;
 
     await post.save();
 

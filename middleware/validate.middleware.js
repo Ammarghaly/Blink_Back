@@ -57,7 +57,7 @@ export const loginSchema = {
   password: { required: true },
 };
 
-export const createPostSchema = {
+export const postSchema = {
   title: { required: true, minLength: 3, maxLength: 100 },
   content: { required: true, minLength: 10 },
 };
