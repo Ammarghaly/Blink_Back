@@ -6,6 +6,7 @@ dotenv.config();
 export const sendEmail = async (to, otp) => {
   try {
     const transporter = nodemailer.createTransport({
+      
       host: "smtp-relay.brevo.com",
       port: 587,
       secure: false,
@@ -32,13 +33,13 @@ export const sendEmail = async (to, otp) => {
     `;
 
     await transporter.sendMail({
-      from: `"Blink Blog" <${process.env.SMTP_USER}>`, 
+      from: `"Blink Blog" <amargad0112030@gmail.com>`,
       to,
-      subject: " Verify your Blink account", 
-      html: emailHTML, 
+      subject: " Verify your Blink account",
+      html: emailHTML,
     });
 
-    console.log(`✅ Verification email sent successfully to: ${to}`);
+    console.log(`Verification email sent successfully to: ${to}`);
   } catch (error) {
     console.error(" Email error:", error.message);
     throw new Error("Failed to send verification email");
