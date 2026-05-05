@@ -18,6 +18,7 @@ This platform allows users to read, publish, and interact with blog posts. It fe
 - **Browse Posts:** Anyone can view the feed of published blog posts.
 - **Read Comments:** All comments on posts are publicly visible.
 - **Pagination:** Smooth browsing through multiple pages of posts.
+- **Account Verification:** Secure OTP (One-Time Password) email verification system to ensure authentic user registration.
 
 ### 🔐 Authenticated Users (Login/Register Required)
 - **Create & Share:** Publish new blog posts and share them.
@@ -52,6 +53,7 @@ The backend serves as a secure and scalable RESTful API.
 - **Database:** [MongoDB](https://www.mongodb.com/) using [Mongoose](https://mongoosejs.com/) for modeling data (Users, Posts, Comments).
 - **Authentication:** [JSON Web Token (JWT)](https://jwt.io/) for secure API routes and session handling.
 - **Security:** [Bcryptjs](https://www.npmjs.com/package/bcryptjs) for password hashing before saving to the database.
+ **Email Service:** [Nodemailer](https://nodemailer.com/) for dispatching automated OTP verification emails.-
 - **File Uploads:** [Multer](https://www.npmjs.com/package/multer) for handling multipart/form-data (used for uploading user profile pictures and post images).
 - **Middlewares:** `cors` for cross-origin requests, `dotenv` for environment variables.
 
@@ -81,6 +83,9 @@ Create a .env file in the Blink_Back directory and add the following:
 PORT=5000
 MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_secret_key
+# Email settings for OTP
+EMAIL=your_gmail_address@gmail.com
+EMAIL_PASS=your_google_app_password
 ```
 Start the backend server:
 ```bash
